@@ -1,70 +1,145 @@
-# Orca Koii Task Template
+# Project Starter Template
 
-Extension of Koii Task Template for developing Orca Tasks.
+## Project Overview
 
-## New to Koii Tasks? Have questions about how tasks work under the hood?
+This is a comprehensive project starter template designed for modern JavaScript/Node.js applications with robust development workflows, containerization, and best practices built-in. 
 
-If you're developing your first task, we recommend you gr through Lesson 1 of the [EZSandbox](https://github.com/koii-network/ezsandbox) before diving into Orca. This will give you a good grounding in how tasks work. If you'd like to dive deeper, check out our [docs](https://www.koii.network/docs/concepts/what-are-tasks/what-are-tasks).
+### Key Features
+- 🚀 Rapid project initialization
+- 🐳 Docker and docker-compose support
+- 🧪 Integrated testing framework
+- 📦 Webpack configuration
+- 🔍 Linting and code formatting (ESLint, Prettier)
+- 🌐 Modular task-based architecture
+- 🔒 Environment configuration management
 
-### Task Functions
+## Getting Started
 
-Every Koii Task must perform 4 functions:
+### Prerequisites
+- Node.js (v14+ recommended)
+- Docker (optional, but recommended)
+- npm or Yarn
 
-1. Task
-2. Submission
-3. Audit
-4. Distribute rewards
+### Installation
 
-These four functions are defined in the file `src/index.js`.
+1. Clone the repository:
+```bash
+git clone https://github.com/your-org/project-starter.git
+cd project-starter
+```
 
-In a regular Koii task, you would write your task logic here. In the case of an Orca task, three of these functions make calls to your HTTP endpoints within your container. In most cases, you will not need to edit these functions.
+2. Install dependencies:
+```bash
+npm install
+# or
+yarn install
+```
 
-The fourth function, `distribution` defines your compensation logic, and can be edited as needed.
+3. Set up environment variables:
+```bash
+# Copy example environment files
+cp .env.developer.example .env.local
+# Edit .env.local with your specific configurations
+```
 
-- `task(roundNumber)`: Makes a get request to the endpoint `/task/:roundNumber`.
-- `submission(roundNumber)`: Makes a get request to the endpoint `/submission/:roundNumber`, then uploads the submission data to IPFS and returns the file CID to be submitted on chain as the submission proof.
-- `audit(submission, roundNumber)`: Retrieves the submission data from IPFS using the CID that was submitted on chain. Makes a post request to `/audit` and returns the result.
-- `distribution(submitters, bounty, roundNumber)`: The default code deducts 70% of the stake for nodes that fail audit and distributes the bounty for that round (defined by `bounty_per_round` in your `config-task.yml`) equally between all nodes that pass audit.
+4. Run the application:
+```bash
+# Development mode
+npm run dev
+# or
+yarn dev
 
-## Using Orca
+# Production build
+npm run build
+npm start
+# or
+yarn build
+yarn start
+```
 
-The Orca task template is designed to simplify the steps needed for integration with Koii Tasks. To that end, there are only two main elements you need to configure:
+5. Optional: Docker Deployment
+```bash
+# Build and run with Docker
+docker-compose up --build
+```
 
-1. Container creation
-2. Task endpoints
+## Customization Guide
 
-### Container Creation
+### Modifying the Template
+- `src/` directory: Implement your core application logic
+- `src/task/`: Define task-specific workflows
+- `tests/`: Add or modify test suites
+- `container/`: Customize Dockerfile and container configurations
+- `.env.local`: Configure environment-specific settings
 
-A sample container is provided in the `container` folder.
+### Renaming and Rebranding
+1. Update `package.json`:
+   - Change `name`
+   - Update `description`
+   - Modify `scripts` as needed
 
-### Container Port
+2. Update Docker configurations:
+   - Modify `container/Dockerfile`
+   - Adjust `docker-compose.yaml`
 
-The container must listen on port 8080.
+3. Update documentation and license files
 
+## Project Structure
+```
+project-starter/
+│
+├── src/                # Main application source code
+│   ├── task/           # Task-specific modules
+│   ├── helpers.js      # Utility functions
+│   └── index.js        # Application entry point
+│
+├── tests/              # Testing infrastructure
+│   ├── main.test.js    # Primary test suite
+│   └── wasm/           # WebAssembly test resources
+│
+├── container/          # Containerization resources
+│   ├── Dockerfile      # Docker build instructions
+│   └── requirements.txt
+│
+├── config/             # Configuration files
+│   ├── .eslintrc.js    # ESLint configuration
+│   └── .prettierrc     # Code formatting rules
+│
+└── docker-compose.yaml # Multi-container orchestration
+```
 
-### Container Endpoints
+## Technologies Used
+- **Backend**: Node.js
+- **Build Tools**: Webpack, Nodemon
+- **Testing**: Jest
+- **Containerization**: Docker
+- **Code Quality**: ESLint, Prettier
+- **Environment**: dotenv
 
-Your container must have 4 HTTP endpoints:
+## Use Cases
+- Microservice development
+- API backend scaffolding
+- Task-oriented workflow applications
+- Prototyping and rapid development
 
-- `/healthz`: To verify your container is running, Orca requires an endpoint at that accepts a post request and returns a 200 response. The content of the response is unimportant.
-- `/task/:roundNumber`. This endpoint should kick off the task each round, and store the result of the task (your proofs) with the round number, so it can be retrieved by `submission`.
-- `/submission/:roundNumber` Retrieves the stored submission data.
-- `/audit`: Check the submission (using whatever method makes sense for your task) and return a boolean representing whether or not the submission was correct.
+## Contributing
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/awesome-feature`)
+3. Commit changes (`git commit -m 'Add awesome feature'`)
+4. Push to branch (`git push origin feature/awesome-feature`)
+5. Open a Pull Request
 
-### Creating the Container
+### Development Guidelines
+- Follow existing code style
+- Write unit tests for new functionality
+- Update documentation
 
-#### Container Image
+## License
+This project is licensed under the MIT License. See `LICENSE` file for details.
 
-When your container is ready, build it and upload it to a container repository like Docker Hub. Add your container image URL in `src/orcaSettings.js`.
+## Support
+For questions or issues, please file a GitHub issue or contact [your-email@example.com].
 
-#### PodSpec
+---
 
-If you have a more complex configuration, you can define a podSpec in `src/orcaSettings.js`; an example is provided. If you supply both an image URL and a podSpec, the podSpec will take precedence.
-
-<!-- ### SSL (optional)
-
-If you would like to use SSL, specify a certificate for rootCA. -->
-
-### Deploy Task
-
-Deploy your task using the `create-task-cli` tool. Full instructions are available [here](https://github.com/koii-network/ezsandbox/blob/main/Lesson%201/PartIV.md).
+**Happy Coding! 🚀👩‍💻👨‍💻**
